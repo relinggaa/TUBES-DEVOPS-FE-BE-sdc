@@ -66,7 +66,7 @@ class BensinControllerTest extends TestCase
             ->assertInertia(fn ($page) => $page
                 ->component('Driver/UploadBill')
                 ->has('riwayatStruk')
-                ->count('riwayatStruk', 1)
+                ->count('riwayatStruk.data', 1)
             );
     }
 
@@ -80,7 +80,7 @@ class BensinControllerTest extends TestCase
 
         $this->actingAs($driver1)
             ->get(route('driver.struk-bensin'))
-            ->assertInertia(fn ($page) => $page->count('riwayatStruk', 1));
+            ->assertInertia(fn ($page) => $page->count('riwayatStruk.data', 1));
     }
 
     /** [UNAUTHORIZED] Guest tidak bisa mengakses halaman struk bensin driver. */

@@ -45,24 +45,31 @@ const { default: UploadBill } = await import('../../../Pages/Driver/UploadBill')
 // ============================================================
 // Dummy Data
 // ============================================================
-const mockRiwayatStruk = [
-  {
-    id: 1,
-    gambar: 'struk_bensin/dummy1.jpg',
-    bank: 'BCA',
-    no_rekening: '111',
-    is_accept: null,
-    created_at: '2026-04-24T10:00:00Z',
-  },
-  {
-    id: 2,
-    gambar: 'struk_bensin/dummy2.jpg',
-    bank: 'GOPAY',
-    no_rekening: '08123456789',
-    is_accept: true,
-    created_at: '2026-04-23T08:30:00Z',
-  },
-];
+// Paginated Laravel structure (matches riwayatStruk.data usage in component)
+const mockRiwayatStruk = {
+  data: [
+    {
+      id: 1,
+      gambar: 'struk_bensin/dummy1.jpg',
+      bank: 'BCA',
+      no_rekening: '111',
+      is_accept: null,
+      created_at: '2026-04-24T10:00:00Z',
+    },
+    {
+      id: 2,
+      gambar: 'struk_bensin/dummy2.jpg',
+      bank: 'GOPAY',
+      no_rekening: '08123456789',
+      is_accept: true,
+      created_at: '2026-04-23T08:30:00Z',
+    },
+  ],
+  total: 2,
+  from: 1,
+  to: 2,
+  links: [],
+};
 
 // Helper: pilih file di input
 async function selectFile(filename = 'struk.png', type = 'image/png') {
@@ -92,7 +99,7 @@ describe('UploadBill Component', () => {
   // ---- Render & UI ----
 
   it('1. Merender halaman UploadBill dengan benar', () => {
-    render(<UploadBill riwayatStruk={[]} />);
+    render(<UploadBill riwayatStruk={{ data: [], total: 0, from: null, to: null, links: [] }} />);
 
     expect(screen.getAllByText('Upload Struk Bensin').length).toBeGreaterThan(0);
     expect(screen.getByText('Daftarkan Struk Baru')).toBeDefined();
@@ -102,7 +109,7 @@ describe('UploadBill Component', () => {
   });
 
   it('2. Menampilkan "Belum ada history" ketika riwayatStruk kosong', () => {
-    render(<UploadBill riwayatStruk={[]} />);
+    render(<UploadBill riwayatStruk={{ data: [], total: 0, from: null, to: null, links: [] }} />);
 
     expect(screen.getByText('Belum ada history')).toBeDefined();
     expect(screen.getByText('Struk yang diupload akan muncul di sini')).toBeDefined();
@@ -117,7 +124,7 @@ describe('UploadBill Component', () => {
   });
 
   it('4. Memunculkan file preview setelah input file; tombol upload aktif jika no rekening diisi', async () => {
-    render(<UploadBill riwayatStruk={[]} />);
+    render(<UploadBill riwayatStruk={{ data: [], total: 0, from: null, to: null, links: [] }} />);
 
     await selectFile();
 
@@ -134,7 +141,7 @@ describe('UploadBill Component', () => {
   });
 
   it('5. Tombol hapus preview (X) menghapus preview dan menonaktifkan tombol upload', async () => {
-    render(<UploadBill riwayatStruk={[]} />);
+    render(<UploadBill riwayatStruk={{ data: [], total: 0, from: null, to: null, links: [] }} />);
 
     await selectFile();
     fillNoRekening();
@@ -152,7 +159,7 @@ describe('UploadBill Component', () => {
   });
 
   it('6. Menjalankan router.post saat tombol Upload diklik dengan file valid', async () => {
-    render(<UploadBill riwayatStruk={[]} />);
+    render(<UploadBill riwayatStruk={{ data: [], total: 0, from: null, to: null, links: [] }} />);
 
     const file = await selectFile();
     fillNoRekening('5550011');
@@ -174,7 +181,7 @@ describe('UploadBill Component', () => {
       options?.onSuccess?.();
     });
 
-    render(<UploadBill riwayatStruk={[]} />);
+    render(<UploadBill riwayatStruk={{ data: [], total: 0, from: null, to: null, links: [] }} />);
     await selectFile();
     fillNoRekening();
 
@@ -192,7 +199,7 @@ describe('UploadBill Component', () => {
       options?.onError?.({ gambar: 'File terlalu besar' });
     });
 
-    render(<UploadBill riwayatStruk={[]} />);
+    render(<UploadBill riwayatStruk={{ data: [], total: 0, from: null, to: null, links: [] }} />);
     await selectFile();
     fillNoRekening();
 
@@ -207,7 +214,7 @@ describe('UploadBill Component', () => {
   it('9. Menampilkan toast.success ketika flash.success ada', async () => {
     mockFlash = { success: 'Struk berhasil diupload!' };
 
-    render(<UploadBill riwayatStruk={[]} />);
+    render(<UploadBill riwayatStruk={{ data: [], total: 0, from: null, to: null, links: [] }} />);
 
     await waitFor(() => {
       expect(toast.success).toHaveBeenCalledWith(
@@ -220,7 +227,7 @@ describe('UploadBill Component', () => {
   it('10. Menampilkan toast.error ketika flash.error ada', async () => {
     mockFlash = { error: 'Upload gagal!' };
 
-    render(<UploadBill riwayatStruk={[]} />);
+    render(<UploadBill riwayatStruk={{ data: [], total: 0, from: null, to: null, links: [] }} />);
 
     await waitFor(() => {
       expect(toast.error).toHaveBeenCalledWith(
@@ -231,7 +238,7 @@ describe('UploadBill Component', () => {
   });
 
   it('11. Link "back" ke dashboard tersedia', () => {
-    render(<UploadBill riwayatStruk={[]} />);
+    render(<UploadBill riwayatStruk={{ data: [], total: 0, from: null, to: null, links: [] }} />);
     const backLink = document.querySelector('a[href="/driver/dashboard"]');
     expect(backLink).not.toBeNull();
   });
