@@ -68,7 +68,12 @@ const mockRiwayatStruk = {
   total: 2,
   from: 1,
   to: 2,
-  links: [],
+  // Laravel paginator links: [prev, ...pageNumbers, next]
+  links: [
+    { url: null, label: '&laquo; Previous', active: false },
+    { url: 'http://localhost?page=1', label: '1', active: true },
+    { url: null, label: 'Next &raquo;', active: false },
+  ],
 };
 
 // Helper: pilih file di input
