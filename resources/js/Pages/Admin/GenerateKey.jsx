@@ -1,15 +1,18 @@
-import React, { useState, useMemo, useEffect, useRef } from 'react';
-import LayoutAdmin from '../../layout/LayoutAdmin';
-import { useTheme } from '../../contexts/ThemeContext';
-import { usePage, router } from '@inertiajs/react';
-import DaftarUserTable from '../../components/admin/GenerateKey/DaftarUserTable';
-import Header from '../../components/admin/GenerateKey/Header';
-import CreateModal from '../../components/admin/GenerateKey/CreateModal';
-import Modal from '../../components/admin/GenerateKey/Modal';
-import DeleteModal from '../../components/admin/DeleteModal';
-import { toast } from 'react-toastify';
+import React, { useState, useMemo, useEffect, useRef } from "react";
+import LayoutAdmin from "../../layout/LayoutAdmin";
+import { useTheme } from "../../contexts/ThemeContext";
+import { usePage, router } from "@inertiajs/react";
+import DaftarUserTable from "../../components/admin/GenerateKey/DaftarUserTable";
+import Header from "../../components/admin/GenerateKey/Header";
+import CreateModal from "../../components/admin/GenerateKey/CreateModal";
+import Modal from "../../components/admin/GenerateKey/Modal";
+import DeleteModal from "../../components/admin/DeleteModal";
+import { toast } from "react-toastify";
 
-export default function GenerateKey({ users = { data: [], links: [], current_page: 1, last_page: 1, total: 0 }, filters = { search: '', filter_role: 'all' } }) {
+export default function GenerateKey({
+    users = { data: [], links: [], current_page: 1, last_page: 1, total: 0 },
+    filters = { search: "", filter_role: "all" },
+}) {
     const { currentTheme } = useTheme();
     const { flash } = usePage().props;
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -17,21 +20,21 @@ export default function GenerateKey({ users = { data: [], links: [], current_pag
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
     const [editingUser, setEditingUser] = useState(null);
     const [deletingUserId, setDeletingUserId] = useState(null);
-
+    // Test
     const [formData, setFormData] = useState({
-        username: '',
-        role: 'Admin',
-        key: ''
+        username: "",
+        role: "Admin",
+        key: "",
     });
     const [copiedKey, setCopiedKey] = useState(null);
     const [errors, setErrors] = useState({});
-    const [searchQuery, setSearchQuery] = useState(filters.search || '');
-    const [filterRole, setFilterRole] = useState(filters.filter_role || 'all');
+    const [searchQuery, setSearchQuery] = useState(filters.search || "");
+    const [filterRole, setFilterRole] = useState(filters.filter_role || "all");
     const searchTimeoutRef = useRef(null);
 
     const generateRandomKey = () => {
-        const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-        let key = '';
+        const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+        let key = "";
         for (let i = 0; i < 8; i++) {
             key += chars.charAt(Math.floor(Math.random() * chars.length));
         }
@@ -48,28 +51,25 @@ export default function GenerateKey({ users = { data: [], links: [], current_pag
         e.preventDefault();
         setErrors({});
 
-
         setIsModalOpen(false);
         const previousFormData = { ...formData };
-        setFormData({ username: '', role: 'Admin', key: '' });
+        setFormData({ username: "", role: "Admin", key: "" });
 
-        router.post('/admin/generate-key', previousFormData, {
+        router.post("/admin/generate-key", previousFormData, {
             preserveScroll: true,
             preserveState: false,
-            onSuccess: () => {
-
-            },
+            onSuccess: () => {},
             onError: (errors) => {
                 setErrors(errors);
                 setIsModalOpen(true);
                 setFormData(previousFormData);
-            }
+            },
         });
     };
 
     const handleCloseModal = () => {
         setIsModalOpen(false);
-        setFormData({ username: '', role: 'Admin', key: '' });
+        setFormData({ username: "", role: "Admin", key: "" });
         setErrors({});
     };
 
@@ -78,7 +78,7 @@ export default function GenerateKey({ users = { data: [], links: [], current_pag
         setFormData({
             username: user.username,
             role: user.role,
-            key: user.key
+            key: user.key,
         });
         setIsUpdateModalOpen(true);
         setErrors({});
@@ -99,21 +99,21 @@ export default function GenerateKey({ users = { data: [], links: [], current_pag
             preserveState: false,
             onSuccess: () => {
                 setEditingUser(null);
-                setFormData({ username: '', role: 'Admin', key: '' });
+                setFormData({ username: "", role: "Admin", key: "" });
             },
             onError: (errors) => {
                 setErrors(errors);
                 setIsUpdateModalOpen(true);
                 setEditingUser(previousEditingUser);
                 setFormData(previousFormData);
-            }
+            },
         });
     };
 
     const handleCloseUpdateModal = () => {
         setIsUpdateModalOpen(false);
         setEditingUser(null);
-        setFormData({ username: '', role: 'Admin', key: '' });
+        setFormData({ username: "", role: "Admin", key: "" });
         setErrors({});
     };
 
@@ -130,7 +130,7 @@ export default function GenerateKey({ users = { data: [], links: [], current_pag
                 onSuccess: () => {
                     setIsDeleteModalOpen(false);
                     setDeletingUserId(null);
-                }
+                },
             });
         }
     };
@@ -139,7 +139,6 @@ export default function GenerateKey({ users = { data: [], links: [], current_pag
         setIsDeleteModalOpen(false);
         setDeletingUserId(null);
     };
-
 
     useEffect(() => {
         if (filters.search !== undefined) {
@@ -150,7 +149,6 @@ export default function GenerateKey({ users = { data: [], links: [], current_pag
         }
     }, [filters]);
 
-   
     useEffect(() => {
         if (flash?.success) {
             toast.success(flash.success, {
@@ -161,65 +159,59 @@ export default function GenerateKey({ users = { data: [], links: [], current_pag
                 pauseOnHover: true,
                 draggable: true,
                 style: {
-                    backgroundColor: '#000000',
-                    color: '#ffffff',
+                    backgroundColor: "#000000",
+                    color: "#ffffff",
                     border: `1px solid ${currentTheme.hex.primary}40`,
-                    borderRadius: '12px',
-                    boxShadow: `0 4px 12px ${currentTheme.hex.primary}30`
+                    borderRadius: "12px",
+                    boxShadow: `0 4px 12px ${currentTheme.hex.primary}30`,
                 },
                 progressStyle: {
-                    background: `linear-gradient(to right, ${currentTheme.hex.primary}, ${currentTheme.hex.secondary})`
-                }
+                    background: `linear-gradient(to right, ${currentTheme.hex.primary}, ${currentTheme.hex.secondary})`,
+                },
             });
         }
     }, [flash?.success, currentTheme]);
 
-
     const applyFilters = (search, role, page = 1) => {
         const params = {};
-        if (search && search.trim() !== '') {
+        if (search && search.trim() !== "") {
             params.search = search.trim();
         }
-        if (role && role !== 'all') {
+        if (role && role !== "all") {
             params.filter_role = role;
         }
 
         params.page = page;
 
-        router.get('/admin/generate-key', params, {
+        router.get("/admin/generate-key", params, {
             preserveState: true,
             preserveScroll: true,
-            only: ['users', 'filters'],
-            replace: true
+            only: ["users", "filters"],
+            replace: true,
         });
     };
-
 
     const handleSearchChange = (value) => {
         setSearchQuery(value);
 
-
         if (searchTimeoutRef.current) {
             clearTimeout(searchTimeoutRef.current);
         }
-
 
         searchTimeoutRef.current = setTimeout(() => {
             applyFilters(value, filterRole);
         }, 500);
     };
 
-
     const handleFilterRoleChange = (value) => {
         setFilterRole(value);
         applyFilters(searchQuery, value);
     };
 
-
     const handleResetFilters = () => {
-        setSearchQuery('');
-        setFilterRole('all');
-        applyFilters('', 'all');
+        setSearchQuery("");
+        setFilterRole("all");
+        applyFilters("", "all");
     };
 
     return (
